@@ -71,3 +71,11 @@ CREATE TABLE tasks_tbl(
     project INT references projects_tbl(projects_id)
 );
 
+INSERT INTO tasks_tbl (task_name, start_date, end_date, description, is_done, project) VALUES (
+    sample,
+    2023-01-01,
+    2023-02-08,
+    'hi',
+    FALSE,
+    2
+);
