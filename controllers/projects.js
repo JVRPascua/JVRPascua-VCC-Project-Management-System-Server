@@ -63,7 +63,6 @@ export const createProjects = async (req, res) => {
 
          res.json(newProject.rows[0]);
     } catch (error) {
-        console.log(error);
         res.status(409).json({ message: error });
     }
 };

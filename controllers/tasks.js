@@ -23,7 +23,8 @@ export const getProjectTasks = async (req, res) => {
 
 export const createProjectTasks = async (req, res) => {
     try {
-        const { task_name, start_date, end_date, description, is_done, project } = req.body;
+        const { task_name, start_date, end_date, description, project } = req.body;
+        const is_done = false;
         const newProjectTask = await pool.query("INSERT INTO tasks_tbl (task_name, start_date, end_date, description, is_done, project) VALUES($1, $2, $3, $4, $5, $6) RETURNING *", [task_name, start_date, end_date, description, is_done, project]);
 
          res.json(newProjectTask.rows[0]);
