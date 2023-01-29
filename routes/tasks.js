@@ -6,7 +6,7 @@ import auth from "../middleware/auth.js";
 
 const router = express.Router();
 
-router.get('/', getProjectTasks);
+router.get('/:id', getProjectTasks);
 router.post('/', createProjectTasks);
 
 export default router;
