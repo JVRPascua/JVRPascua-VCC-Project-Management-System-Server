@@ -24,4 +24,25 @@ export const createProjectTasks = async (req, res) => {
     }
 };
 
+export const updateTask = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { task_name, start_date, end_date, description} = req.body;
+        const updateTask = await pool.query("UPDATE tasks_tbl SET task_name = $1, start_date = $2, end_date = $3 , description = $4 WHERE tasks_id = $5", [task_name, start_date, end_date, description, id]);
+        res.json("Task was updated");
+    } catch (error) {
+        res.status(404).send("No task with that ID");
+    }
+}
 
+export const deleteTask = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const deleteTask = await pool.query("DELETE FROM tasks_tbl WHERE tasks_id = $1", [id]);
+
+        res.json("Task was deleted");    
+    } catch (error) {
+        res.status(404).send("No task with that ID");
+    }
+}

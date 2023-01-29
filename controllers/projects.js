@@ -82,11 +82,12 @@ export const deleteProject = async (req, res) => {
 
     try {
         const { id } = req.params;
+
+        const deleteProjectTasks = await pool.query("DELETE FROM tasks_tbl WHERE project = $1", [id]);
         const deleteProject = await pool.query("DELETE FROM projects_tbl WHERE projects_id = $1", [id]);
+
         res.json("Project was deleted");    
     } catch (error) {
         res.status(404).send("No project with that ID");
     }
-
-
 }

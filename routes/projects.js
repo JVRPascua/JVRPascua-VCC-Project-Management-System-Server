@@ -11,6 +11,6 @@ router.get('/:id', getProject);
 router.get('/search', auth, getProjectsBySearch);
 router.post('/', auth, createProjects);
 router.patch('/:id', auth, updateProject);
-router.delete('/:id', auth, deleteProject);
+router.delete('/:id', deleteProject);
 
 export default router;
