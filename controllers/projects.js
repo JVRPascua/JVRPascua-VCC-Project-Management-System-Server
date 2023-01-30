@@ -18,11 +18,11 @@ export const getProjects = async (req, res) => {
             const total = await pool.query("SELECT COUNT(projects_id) AS exact_count FROM projects_tbl");
             const totalProjectId = total.rows[0].exact_count;
             if(id === 1){
-                const result = await pool.query("SELECT * FROM projects_tbl ORDER BY projects_id LIMIT $2 OFFSET (($1 - 1) * $2)",[page, limit]);
+                const result = await pool.query("SELECT * FROM projects_tbl ORDER BY projects_id DESC LIMIT $2 OFFSET (($1 - 1) * $2)",[page, limit]);
                 res.status(200).json({ data: result.rows, currentPage: Number(page), numberOfPages: Math.ceil(totalProjectId / limit) });
             }
             else{
-                const result = await pool.query("SELECT * FROM projects_tbl WHERE project_manager = $3 ORDER BY projects_id LIMIT $2 OFFSET (($1 - 1) * $2)",[page, limit, id]);
+                const result = await pool.query("SELECT * FROM projects_tbl WHERE project_manager = $3 ORDER BY projects_id DESC LIMIT $2 OFFSET (($1 - 1) * $2)",[page, limit, id]);
                 const totalProjects = result.rowCount;
                 res.status(200).json({ data: result.rows, currentPage: Number(page), numberOfPages: Math.ceil(totalProjects / limit) });
             }
@@ -46,9 +46,8 @@ export const getProjects = async (req, res) => {
 
 export const getProjectsBySearch = async (req, res) => {
     const { searchQuery } = req.query;
-
     try {
-        const projects = await pool.query("SELECT projects_id, project_name, budget, start_date, end_date, description, project_manager FROM projects_tbl WHERE project_name = $1", [searchQuery]);
+        const projects = await pool.query("SELECT projects_id, project_name, budget, start_date, end_date, description, project_manager FROM projects_tbl WHERE project_name ILIKE $1", [`%${searchQuery}%`]);
 
         res.status(200).json(projects.rows);
     } catch (error) {
