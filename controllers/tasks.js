@@ -11,6 +11,16 @@ export const getProjectTasks = async (req, res) => {
     }
 };
 
+export const getTask = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const task = await pool.query("SELECT tasks_id, task_name, start_date, end_date, description FROM tasks_tbl WHERE tasks_id = $1", [id]);
+        res.status(200).json(task.rows);
+    } catch (error) {
+        res.status(404).json({ error });
+    }
+}
+
 export const createProjectTasks = async (req, res) => {
     try {
         const { task_name, start_date, end_date, description, project } = req.body;
