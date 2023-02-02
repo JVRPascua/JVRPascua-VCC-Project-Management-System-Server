@@ -79,3 +79,6 @@ INSERT INTO tasks_tbl (task_name, start_date, end_date, description, is_done, pr
     FALSE,
     2
 );
+
+ALTER TABLE tasks_tbl  
+ADD COLUMN priority INT;
