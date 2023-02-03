@@ -82,3 +82,12 @@ INSERT INTO tasks_tbl (task_name, start_date, end_date, description, is_done, pr
 
 ALTER TABLE tasks_tbl  
 ADD COLUMN priority INT;
+
+CREATE TABLE comments_tbl(
+    comment_id SERIAL PRIMARY KEY,
+    comment_date DATE,
+    comment_text VARCHAR(1000),
+    comment_image BYTEA,
+    comment_user INT,
+    task INT references tasks_tbl(tasks_id)
+);

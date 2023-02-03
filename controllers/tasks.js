@@ -29,7 +29,6 @@ export const createProjectTasks = async (req, res) => {
 
          res.json(newProjectTask.rows[0]);
     } catch (error) {
-        console.log(error);
         res.status(409).json({ error });
     }
 };

@@ -5,6 +5,7 @@ import cors from 'cors';
 import projectsRoutes from './routes/projects.js';
 import authRoutes from './routes/auth.js';
 import tasksRoutes from './routes/tasks.js';
+import commentsRoutes from './routes/comments.js';
 const app = express();
 dotenv.config();
 
@@ -14,6 +15,7 @@ app.use(cors());
 app.use('/projects', projectsRoutes);
 app.use('/auth', authRoutes);
 app.use('/tasks', tasksRoutes);
+app.use('/comments', commentsRoutes);
 
 const port = process.env.PORT;
 
