@@ -1,5 +1,6 @@
 import dotenv from 'dotenv'; 
 import express from 'express';
+import bodyParser from 'body-parser';
 import morgan from 'morgan';
 import cors from 'cors';
 import projectsRoutes from './routes/projects.js';
@@ -9,7 +10,8 @@ import commentsRoutes from './routes/comments.js';
 const app = express();
 dotenv.config();
 
-app.use(express.json());
+app.use(bodyParser.json({ limit: '30mb', extended: true }));
+app.use(bodyParser.urlencoded({ limit: '30mb', extended: true }));
 app.use(cors());
 
 app.use('/projects', projectsRoutes);

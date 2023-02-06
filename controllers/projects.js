@@ -31,19 +31,6 @@ export const getProjects = async (req, res) => {
     }
 };
 
-//const client = await pool.connect(); // creates connection
-//        const { page, size } = req.query;
-//        const query = `
-//                SELECT *
-//                FROM "users"
-//                ORDER BY "users"."id"
-//                LIMIT $2
-//                OFFSET (($1 - 1) * $2);
-//        `;
-//        try {
-//            const { rows } = await client.query(query, [page, size]); // sends query
-//            res.status(200).json(rows);
-
 export const getProjectsBySearch = async (req, res) => {
     const { searchQuery } = req.query;
     try {
@@ -82,6 +69,7 @@ export const deleteProject = async (req, res) => {
     try {
         const { id } = req.params;
 
+        const deleteComments = await pool.query("DELETE FROM comments_tbl WHERE project = $1", [id]);
         const deleteProjectTasks = await pool.query("DELETE FROM tasks_tbl WHERE project = $1", [id]);
         const deleteProject = await pool.query("DELETE FROM projects_tbl WHERE projects_id = $1", [id]);
 

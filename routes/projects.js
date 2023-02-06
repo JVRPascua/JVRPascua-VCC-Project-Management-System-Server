@@ -6,11 +6,11 @@ import auth from "../middleware/auth.js";
 
 const router = express.Router();
 
-router.get('/', getProjects);
-router.get('/search', getProjectsBySearch);
-router.get('/:id', getProject);
+router.get('/', auth, getProjects);
+router.get('/search', auth, getProjectsBySearch);
+router.get('/:id', auth, getProject);
 router.post('/', auth, createProjects);
 router.patch('/:id', auth, updateProject);
-router.delete('/:id', deleteProject);
+router.delete('/:id', auth, deleteProject);
 
 export default router;
