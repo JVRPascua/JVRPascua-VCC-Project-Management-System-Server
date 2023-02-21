@@ -6,29 +6,6 @@ import pool from '../db.js';
 
 dotenv.config();
 
-// export const signin = async (req, res) => {
-//     const { username, password } = req.body;
-
-//     try {
-//         const existingUser = await pool.query(`SELECT * FROM users WHERE username= $1;`, [username]);
-//         const user = existingUser.rows;
-//         if (user.length === 0) {
-//             res.status(400).json({error: "User not found!",});
-//         }
-//         else
-//         bcrypt.compare(password, user[0].password, (err, result) => {
-//             if (err) {
-//                 res.status(500).json({error: "Server Error!",});
-//             }
-//         });
-//         const token = jwt.sign({ username: existingUser.username, id: existingUser.users_id }, 'test', {expiresIn: "1h"})
-
-//         res.status(200).json({ result: existingUser, token });
-//     } catch (error) {
-//         res.status(500).json({ message: "Something went wrong."});
-//     }
-// }
-
 export const signin = async (req, res) => {
     const { username, password } = req.body;
     try {
@@ -37,8 +14,9 @@ export const signin = async (req, res) => {
     
     if (user.length === 0) {
     res.status(400).json({
-    error: "User not found!",
+        error: "User not found!",
     });
+    return;
     }
     else {
     bcrypt.compare(password, user[0].password, (err, result) => { //Comparing the hashed password
@@ -46,10 +24,11 @@ export const signin = async (req, res) => {
     res.status(500).json({
     error: "Server error",
     });
+    return;
     } else if (result === true) { //Checking if credentials match
     
     const token = jwt.sign({username: user[0].username, id: user[0].users_id },'test', {expiresIn: "1h"} );
-
+    
     res.status(200).json({
     message: "User signed in!",
     result: existingUser,
@@ -63,6 +42,7 @@ export const signin = async (req, res) => {
     res.status(400).json({
     error: "Wrong credentials!",
     });
+    return;
     }
     })
     }
@@ -72,6 +52,7 @@ export const signin = async (req, res) => {
     error: "Something went wrong!", //Database connection error
     });
     };
+    return;
     };
 
 /* export const signup  =  async (req, res) => {
