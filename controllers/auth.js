@@ -1,7 +1,6 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from 'dotenv'; 
-
 import pool from '../db.js';
 
 dotenv.config();
@@ -9,47 +8,43 @@ dotenv.config();
 export const signin = async (req, res) => {
     const { username, password } = req.body;
     try {
-    const existingUser = await pool.query(`SELECT * FROM users WHERE username= $1;`, [username]) //Verifying if the user exists in the database
-    const user = existingUser.rows;
-    
+        const existingUser = await pool.query(`SELECT * FROM users WHERE username= $1;`, [username])
+        const user = existingUser.rows;
     if (user.length === 0) {
-    res.status(400).json({
+        res.status(400).json({
         error: "User not found!",
     });
     return;
     }
     else {
-    bcrypt.compare(password, user[0].password, (err, result) => { //Comparing the hashed password
+        bcrypt.compare(password, user[0].password, (err, result) => {
     if (err) {
-    res.status(500).json({
-    error: "Server error",
+        res.status(500).json({
+        error: "Server error",
     });
     return;
-    } else if (result === true) { //Checking if credentials match
-    
-    const token = jwt.sign({username: user[0].username, id: user[0].users_id },'test', {expiresIn: "1h"} );
-    
-    res.status(200).json({
-    message: "User signed in!",
-    result: existingUser,
-    token: token,
-    });
+    } else if (result === true) {
+        const token = jwt.sign({username: user[0].username, id: user[0].users_id },'test', {expiresIn: "1h"} );
+        res.status(200).json({
+            message: "User signed in!",
+            result: existingUser,
+            token: token,
+        });
 
     }
     else {
-    //Declaring the errors
-    if (result != true)
-    res.status(400).json({
-    error: "Wrong credentials!",
-    });
-    return;
+        if (result != true)
+            res.status(400).json({
+            error: "Wrong credentials!",
+        });
+        return;
     }
     })
     }
     } catch (err) {
-    console.log(err);
-    res.status(500).json({
-    error: "Something went wrong!", //Database connection error
+        console.log(err);
+        res.status(500).json({
+        error: "Something went wrong!",
     });
     };
     return;

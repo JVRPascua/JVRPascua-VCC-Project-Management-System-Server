@@ -1,7 +1,5 @@
 import express from "express";
-
 import { getTasks, getProjectTasks, getTask, createProjectTasks, updateTask, deleteTask, doneTask } from "../controllers/tasks.js";
-
 import auth from "../middleware/auth.js";
 
 const router = express.Router();

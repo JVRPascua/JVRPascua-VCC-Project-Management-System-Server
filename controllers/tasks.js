@@ -17,12 +17,11 @@ export const getTasks = async (req, res) => {
 };
 
 export const getProjectTasks = async (req, res) => {
-        try{
-            const { id } = req.params;
-
-            const projectTasks = await pool.query("SELECT tasks_id, task_name, start_date, end_date, description, is_done, project, priority FROM tasks_tbl WHERE project = $1 ORDER BY priority, end_date", [id]);
-            res.status(200).json(projectTasks.rows);
-        } catch (error) {
+    try{
+        const { id } = req.params;
+        const projectTasks = await pool.query("SELECT tasks_id, task_name, start_date, end_date, description, is_done, project, priority FROM tasks_tbl WHERE project = $1 ORDER BY priority, end_date", [id]);
+        res.status(200).json(projectTasks.rows);
+    } catch (error) {
         res.status(404).json({ error });
     }
 };
@@ -43,7 +42,6 @@ export const createProjectTasks = async (req, res) => {
     try {
         if(project && projectManager){
             const newProjectTask = await pool.query("INSERT INTO tasks_tbl (task_name, start_date, end_date, description, is_done, project, priority, project_manager) VALUES($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *", [task_name, start_date, end_date, description, is_done, project, priority, projectManager]);
-
             res.json(newProjectTask.rows[0]);
         }
     } catch (error) {
@@ -75,10 +73,8 @@ export const doneTask = async (req, res) => {
 export const deleteTask = async (req, res) => {
     try {
         const { id } = req.params;
-        
         const deleteComments = await pool.query("DELETE FROM comments_tbl WHERE task = $1", [id]);
         const deleteTask = await pool.query("DELETE FROM tasks_tbl WHERE tasks_id = $1", [id]);
-
         res.json("Task was deleted");    
     } catch (error) {
         res.status(404).send("No task with that ID");
