@@ -10,7 +10,6 @@ export const comment = async (req,res) => {
     try {
         if(id && value && userId && projectId){
             const newComment = await pool.query("INSERT INTO comments_tbl (comment_date, comment_text, comment_image, comment_user, task, project) VALUES(NOW(), $1, $2, $3, $4, $5) RETURNING *", [comment_text, comment_image, userId, id, projectId]);
-
             res.json(newComment.rows[0]);
         }
     } catch (error) {
@@ -27,33 +26,4 @@ export const getComments = async (req,res) => {
         res.status(404).json({ error });
     } 
 }
-
-export const getSocketComments = (message) => {
-    const id = message.id;
-    return new Promise((resolve) => {
-       pool.query(
-          "SELECT * FROM comments_tbl WHERE task = $1 ORDER BY comment_date", [id],
-          (error, results) => {
-             if (error) {
-                throw error;
-             }
-             resolve(results.rows);
-           }
-       );
-    });
- };
-
- export const createSocketComment = (message) => {
-	return new Promise((resolve) => {
-		pool.query(
-			"INSERT INTO comments_tbl (comment_date, comment_text, comment_image, comment_user, task, project) VALUES(NOW(), $1, $2, $3, $4, $5) RETURNING *", [message.comment_text, message.comment_image, message.userId, message.id, message.projectId],
-			(error, results) => {
-				if (error) {
-					throw error;
-				}
-				resolve(results.rows);
-			}
-			);
-		});
-};	
 
